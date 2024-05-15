@@ -9,11 +9,11 @@ import (
 	"github.com/twpayne/go-affine2d"
 )
 
-func TestTransformation_Inverse(t *testing.T) {
+func TestTransform_Inverse(t *testing.T) {
 	for _, tc := range []struct {
 		name     string
-		t        *affine2d.Transformation
-		expected *affine2d.Transformation
+		t        *affine2d.Transform
+		expected *affine2d.Transform
 	}{
 		{
 			name:     "identity",
@@ -42,111 +42,111 @@ func TestTransformation_Inverse(t *testing.T) {
 	}
 }
 
-func TestTransformation_Transform(t *testing.T) {
+func TestTransform_Transform(t *testing.T) {
 	for _, tc := range []struct {
-		name           string
-		transformation *affine2d.Transformation
-		v              []float64
-		expected       []float64
+		name      string
+		transform *affine2d.Transform
+		v         []float64
+		expected  []float64
 	}{
 		{
-			name:           "zero_identity",
-			transformation: affine2d.Identity(),
-			v:              []float64{0, 0},
-			expected:       []float64{0, 0},
+			name:      "zero_identity",
+			transform: affine2d.Identity(),
+			v:         []float64{0, 0},
+			expected:  []float64{0, 0},
 		},
 		{
-			name:           "zero_rotate",
-			transformation: affine2d.Rotate(math.Pi),
-			v:              []float64{0, 0},
-			expected:       []float64{0, 0},
+			name:      "zero_rotate",
+			transform: affine2d.Rotate(math.Pi),
+			v:         []float64{0, 0},
+			expected:  []float64{0, 0},
 		},
 		{
-			name:           "zero_scale",
-			transformation: affine2d.Scale(2, 3),
-			v:              []float64{0, 0},
-			expected:       []float64{0, 0},
+			name:      "zero_scale",
+			transform: affine2d.Scale(2, 3),
+			v:         []float64{0, 0},
+			expected:  []float64{0, 0},
 		},
 		{
-			name:           "zero_shear",
-			transformation: affine2d.Shear(2, 3),
-			v:              []float64{0, 0},
-			expected:       []float64{0, 0},
+			name:      "zero_shear",
+			transform: affine2d.Shear(2, 3),
+			v:         []float64{0, 0},
+			expected:  []float64{0, 0},
 		},
 		{
-			name:           "zero_translate",
-			transformation: affine2d.Translate(2, 3),
-			v:              []float64{0, 0},
-			expected:       []float64{2, 3},
+			name:      "zero_translate",
+			transform: affine2d.Translate(2, 3),
+			v:         []float64{0, 0},
+			expected:  []float64{2, 3},
 		},
 		{
-			name:           "unit_x_identity",
-			transformation: affine2d.Identity(),
-			v:              []float64{1, 0},
-			expected:       []float64{1, 0},
+			name:      "unit_x_identity",
+			transform: affine2d.Identity(),
+			v:         []float64{1, 0},
+			expected:  []float64{1, 0},
 		},
 		{
-			name:           "unit_x_rotate",
-			transformation: affine2d.Rotate(math.Pi),
-			v:              []float64{1, 0},
-			expected:       []float64{-1, 0},
+			name:      "unit_x_rotate",
+			transform: affine2d.Rotate(math.Pi),
+			v:         []float64{1, 0},
+			expected:  []float64{-1, 0},
 		},
 		{
-			name:           "unit_x_scale",
-			transformation: affine2d.Scale(2, 3),
-			v:              []float64{1, 0},
-			expected:       []float64{2, 0},
+			name:      "unit_x_scale",
+			transform: affine2d.Scale(2, 3),
+			v:         []float64{1, 0},
+			expected:  []float64{2, 0},
 		},
 		{
-			name:           "unit_x_shear",
-			transformation: affine2d.Shear(2, 3),
-			v:              []float64{1, 0},
-			expected:       []float64{1, 3},
+			name:      "unit_x_shear",
+			transform: affine2d.Shear(2, 3),
+			v:         []float64{1, 0},
+			expected:  []float64{1, 3},
 		},
 		{
-			name:           "unit_x_translate",
-			transformation: affine2d.Translate(2, 3),
-			v:              []float64{1, 0},
-			expected:       []float64{3, 3},
+			name:      "unit_x_translate",
+			transform: affine2d.Translate(2, 3),
+			v:         []float64{1, 0},
+			expected:  []float64{3, 3},
 		},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
-			assertInDelta(t, tc.expected, tc.transformation.Transform(tc.v), 1e-15)
+			assertInDelta(t, tc.expected, tc.transform.Transform(tc.v), 1e-15)
 		})
 	}
 }
 
-func TestTransformation_TransformDirection(t *testing.T) {
+func TestTransform_TransformDirection(t *testing.T) {
 	for _, tc := range []struct {
-		name           string
-		transformation *affine2d.Transformation
-		v              []float64
-		expected       []float64
+		name      string
+		transform *affine2d.Transform
+		v         []float64
+		expected  []float64
 	}{
 		{
-			name:           "identity",
-			transformation: affine2d.Identity(),
-			v:              []float64{1, 0},
-			expected:       []float64{1, 0},
+			name:      "identity",
+			transform: affine2d.Identity(),
+			v:         []float64{1, 0},
+			expected:  []float64{1, 0},
 		},
 		{
-			name:           "rotate",
-			transformation: affine2d.Rotate(math.Pi / 2),
-			v:              []float64{1, 0},
-			expected:       []float64{0, 1},
+			name:      "rotate",
+			transform: affine2d.Rotate(math.Pi / 2),
+			v:         []float64{1, 0},
+			expected:  []float64{0, 1},
 		},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
-			assertInDelta(t, tc.expected, tc.transformation.TransformDirection(tc.v), 1e-16)
+			assertInDelta(t, tc.expected, tc.transform.TransformDirection(tc.v), 1e-16)
 		})
 	}
 }
 
-func TestTransformation_Multiply(t *testing.T) {
+func TestTransform_Multiply(t *testing.T) {
 	for _, tc := range []struct {
 		name             string
-		t                *affine2d.Transformation
-		u                *affine2d.Transformation
+		t                *affine2d.Transform
+		u                *affine2d.Transform
 		expectedFloat64s []float64
 	}{
 		{
@@ -204,10 +204,10 @@ func TestTransformation_Multiply(t *testing.T) {
 	}
 }
 
-func TestTransformation_Then(t *testing.T) {
+func TestTransform_Then(t *testing.T) {
 	for _, tc := range []struct {
 		name             string
-		t                *affine2d.Transformation
+		t                *affine2d.Transform
 		expectedFloat64s []float64
 	}{
 		{
@@ -257,7 +257,7 @@ func TestTransformation_Then(t *testing.T) {
 	}
 }
 
-func TestTransformation_TransformSlice(t *testing.T) {
+func TestTransform_TransformSlice(t *testing.T) {
 	unitSquare := [][]float64{
 		{0, 0},
 		{1, 0},
