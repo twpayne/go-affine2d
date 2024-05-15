@@ -105,10 +105,8 @@ func (t *Transform) Then(u *Transform) *Transform {
 
 // Transform transforms a single vector.
 func (t *Transform) Transform(v []float64) []float64 {
-	return []float64{
-		t.m[0]*v[0] + t.m[1]*v[1] + t.m[2],
-		t.m[3]*v[0] + t.m[4]*v[1] + t.m[5],
-	}
+	x, y := t.TransformXY(v[0], v[1])
+	return []float64{x, y}
 }
 
 // TransformDirection transforms the direction v.
@@ -126,6 +124,11 @@ func (t *Transform) TransformSlice(vs [][]float64) [][]float64 {
 		result = append(result, t.Transform(v))
 	}
 	return result
+}
+
+// TransformXY transforms an X-Y coordinate.
+func (t *Transform) TransformXY(x, y float64) (float64, float64) {
+	return t.m[0]*x + t.m[1]*y + t.m[2], t.m[3]*x + t.m[4]*y + t.m[5]
 }
 
 // Translate returns a new transform which is t then a translate.
