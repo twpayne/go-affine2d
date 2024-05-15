@@ -88,11 +88,13 @@ func (t *Transform) Multiply(u *Transform) *Transform {
 
 // Rotate returns a new transform which is t then a rotation.
 func (t *Transform) Rotate(theta float64) *Transform {
+	// FIXME optimize matrix multiplication as we know the structure of the rotate matrix
 	return t.Then(Rotate(theta))
 }
 
 // Scale returns a new transform which is t then a scale.
 func (t *Transform) Scale(sx, sy float64) *Transform {
+	// FIXME optimize matrix multiplication as we know the structure of the scale matrix
 	return t.Then(Scale(sx, sy))
 }
 
@@ -128,5 +130,6 @@ func (t *Transform) TransformSlice(vs [][]float64) [][]float64 {
 
 // Translate returns a new transform which is t then a translate.
 func (t *Transform) Translate(tx, ty float64) *Transform {
+	// FIXME optimize matrix multiplication as we know the structure of the translate matrix
 	return t.Then(Translate(tx, ty))
 }
