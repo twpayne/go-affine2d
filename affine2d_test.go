@@ -37,7 +37,64 @@ func TestTransform_Inverse(t *testing.T) {
 		},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
-			assertInDelta(t, tc.expected.Float64s(), tc.t.Inverse().Float64s(), 0)
+			assertInDelta(t, tc.expected.Float64Slice(), tc.t.Inverse().Float64Slice(), 0)
+		})
+	}
+}
+
+func TestTransform_Float64Array(t *testing.T) {
+	assert.Equal(t, [6]float64{1, 2, 3, 4, 5, 6}, affine2d.NewTransform([6]float64{1, 2, 3, 4, 5, 6}).Float64Array())
+}
+
+func TestTransform_New(t *testing.T) {
+	for _, tc := range []struct {
+		name      string
+		transform *affine2d.Transform
+		expected  [6]float64
+	}{
+		{
+			name:      "new",
+			transform: affine2d.NewTransform([6]float64{1, 2, 3, 4, 5, 6}),
+			expected: [6]float64{
+				1, 2, 3,
+				4, 5, 6,
+			},
+		},
+		{
+			name:      "identity",
+			transform: affine2d.Identity(),
+			expected: [6]float64{
+				1, 0, 0,
+				0, 1, 0,
+			},
+		},
+		{
+			name:      "rotate",
+			transform: affine2d.Rotate(math.Pi),
+			expected: [6]float64{
+				-1, 0, 0,
+				0, -1, 0,
+			},
+		},
+		{
+			name:      "scale",
+			transform: affine2d.Scale(2, 3),
+			expected: [6]float64{
+				2, 0, 0,
+				0, 3, 0,
+			},
+		},
+		{
+			name:      "translate",
+			transform: affine2d.Translate(2, 3),
+			expected: [6]float64{
+				1, 0, 2,
+				0, 1, 3,
+			},
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			assertInDelta(t, tc.expected[:], tc.transform.Float64Slice(), 1e-15)
 		})
 	}
 }
@@ -153,25 +210,25 @@ func TestTransform_Multiply(t *testing.T) {
 			name:             "identity",
 			t:                affine2d.Identity(),
 			u:                affine2d.Identity(),
-			expectedFloat64s: affine2d.Identity().Float64s(),
+			expectedFloat64s: affine2d.Identity().Float64Slice(),
 		},
 		{
 			name:             "identity_scale",
 			t:                affine2d.Identity(),
 			u:                affine2d.Scale(2, 3),
-			expectedFloat64s: affine2d.Scale(2, 3).Float64s(),
+			expectedFloat64s: affine2d.Scale(2, 3).Float64Slice(),
 		},
 		{
 			name:             "rotate_rotate",
 			t:                affine2d.Rotate(math.Pi / 2),
 			u:                affine2d.Rotate(math.Pi),
-			expectedFloat64s: affine2d.Rotate(3 * math.Pi / 2).Float64s(),
+			expectedFloat64s: affine2d.Rotate(3 * math.Pi / 2).Float64Slice(),
 		},
 		{
 			name:             "scale_identity",
 			t:                affine2d.Scale(2, 3),
 			u:                affine2d.Identity(),
-			expectedFloat64s: affine2d.Scale(2, 3).Float64s(),
+			expectedFloat64s: affine2d.Scale(2, 3).Float64Slice(),
 		},
 		{
 			name: "scale_translate",
@@ -195,11 +252,11 @@ func TestTransform_Multiply(t *testing.T) {
 			name:             "translate_translate",
 			t:                affine2d.Translate(2, 3),
 			u:                affine2d.Translate(4, 5),
-			expectedFloat64s: affine2d.Translate(6, 8).Float64s(),
+			expectedFloat64s: affine2d.Translate(6, 8).Float64Slice(),
 		},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
-			assertInDelta(t, tc.expectedFloat64s, tc.t.Multiply(tc.u).Float64s(), 0)
+			assertInDelta(t, tc.expectedFloat64s, tc.t.Multiply(tc.u).Float64Slice(), 0)
 		})
 	}
 }
@@ -252,7 +309,7 @@ func TestTransform_Then(t *testing.T) {
 		},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
-			assertInDelta(t, tc.expectedFloat64s, tc.t.Float64s(), 1e-16)
+			assertInDelta(t, tc.expectedFloat64s, tc.t.Float64Slice(), 1e-16)
 		})
 	}
 }

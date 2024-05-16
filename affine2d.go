@@ -18,6 +18,13 @@ func Identity() *Transform {
 	}
 }
 
+// NewTransform returns a new transform with the given coefficients.
+func NewTransform(m [6]float64) *Transform {
+	return &Transform{
+		m: m,
+	}
+}
+
 // Rotate returns a new rotate transform.
 func Rotate(theta float64) *Transform {
 	cosTheta := math.Cos(theta)
@@ -60,9 +67,14 @@ func Translate(tx, ty float64) *Transform {
 	}
 }
 
-// Float64s returns the coefficients of t's matrix in row order. The returned
+// Float64Array returns the coefficients of t's matrix in row order.
+func (t *Transform) Float64Array() [6]float64 {
+	return t.m
+}
+
+// Float64Slice returns the coefficients of t's matrix in row order. The returned
 // slice must not be modified.
-func (t *Transform) Float64s() []float64 {
+func (t *Transform) Float64Slice() []float64 {
 	return t.m[:]
 }
 
