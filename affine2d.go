@@ -129,8 +129,8 @@ func (t *Transform) Then(u *Transform) *Transform {
 }
 
 // Transform transforms a single vector.
-func (t *Transform) Transform(v []float64) []float64 {
-	x, y := t.TransformXY(v[0], v[1])
+func (t *Transform) Transform(p []float64) []float64 {
+	x, y := t.TransformXY(p[0], p[1])
 	return []float64{x, y}
 }
 
@@ -143,10 +143,10 @@ func (t *Transform) TransformDirection(v []float64) []float64 {
 }
 
 // TransformSlice transforms a slice of vectors.
-func (t *Transform) TransformSlice(vs [][]float64) [][]float64 {
-	result := make([][]float64, 0, len(vs))
-	for _, v := range vs {
-		result = append(result, t.Transform(v))
+func (t *Transform) TransformSlice(ps [][]float64) [][]float64 {
+	result := make([][]float64, 0, len(ps))
+	for _, p := range ps {
+		result = append(result, t.Transform(p))
 	}
 	return result
 }

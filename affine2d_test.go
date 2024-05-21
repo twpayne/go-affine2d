@@ -111,84 +111,84 @@ func TestTransform_Transform(t *testing.T) {
 	for _, tc := range []struct {
 		name      string
 		transform *affine2d.Transform
-		v         []float64
+		p         []float64
 		expected  []float64
 	}{
 		{
 			name:      "zero_identity",
 			transform: affine2d.Identity(),
-			v:         []float64{0, 0},
+			p:         []float64{0, 0},
 			expected:  []float64{0, 0},
 		},
 		{
 			name:      "zero_rotate",
 			transform: affine2d.Rotate(math.Pi),
-			v:         []float64{0, 0},
+			p:         []float64{0, 0},
 			expected:  []float64{0, 0},
 		},
 		{
 			name:      "zero_scale",
 			transform: affine2d.Scale(2, 3),
-			v:         []float64{0, 0},
+			p:         []float64{0, 0},
 			expected:  []float64{0, 0},
 		},
 		{
 			name:      "zero_shear",
 			transform: affine2d.Shear(2, 3),
-			v:         []float64{0, 0},
+			p:         []float64{0, 0},
 			expected:  []float64{0, 0},
 		},
 		{
 			name:      "zero_translate",
 			transform: affine2d.Translate(2, 3),
-			v:         []float64{0, 0},
+			p:         []float64{0, 0},
 			expected:  []float64{2, 3},
 		},
 		{
 			name:      "unit_x_identity",
 			transform: affine2d.Identity(),
-			v:         []float64{1, 0},
+			p:         []float64{1, 0},
 			expected:  []float64{1, 0},
 		},
 		{
 			name:      "unit_x_rotate",
 			transform: affine2d.Rotate(math.Pi),
-			v:         []float64{1, 0},
+			p:         []float64{1, 0},
 			expected:  []float64{-1, 0},
 		},
 		{
 			name:      "unit_x_scale",
 			transform: affine2d.Scale(2, 3),
-			v:         []float64{1, 0},
+			p:         []float64{1, 0},
 			expected:  []float64{2, 0},
 		},
 		{
 			name:      "unit_x_shear",
 			transform: affine2d.Shear(2, 3),
-			v:         []float64{1, 0},
+			p:         []float64{1, 0},
 			expected:  []float64{1, 3},
 		},
 		{
 			name:      "unit_x_translate",
 			transform: affine2d.Translate(2, 3),
-			v:         []float64{1, 0},
+			p:         []float64{1, 0},
 			expected:  []float64{3, 3},
 		},
 		{
 			name:      "origin_delta",
 			transform: affine2d.Delta([]float64{0, 1}, []float64{2, 3}),
-			v:         []float64{0, 0},
+			p:         []float64{0, 0},
 			expected:  []float64{0, 1},
 		},
 		{
 			name:      "unit_x_delta",
 			transform: affine2d.Delta([]float64{0, 1}, []float64{2, 3}),
-			v:         []float64{1, 0},
+			p:         []float64{1, 0},
 			expected:  []float64{2, 3},
 		},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
-			assertInDelta(t, tc.expected, tc.transform.Transform(tc.v), 1e-15)
+			assertInDelta(t, tc.expected, tc.transform.Transform(tc.p), 1e-15)
 		})
 	}
 }
