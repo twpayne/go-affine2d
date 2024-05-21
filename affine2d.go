@@ -8,6 +8,19 @@ type Transform struct {
 	m [6]float64
 }
 
+// Delta returns the transform that transforms the origin to origin and the unit
+// X vector to unitX.
+func Delta(origin, unitX []float64) *Transform {
+	dx := unitX[0] - origin[0]
+	dy := unitX[1] - origin[1]
+	return &Transform{
+		m: [6]float64{
+			dx, -dy, origin[0],
+			dy, dx, origin[1],
+		},
+	}
+}
+
 // Identity returns a new identity transform.
 func Identity() *Transform {
 	return &Transform{

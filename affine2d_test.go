@@ -61,6 +61,14 @@ func TestTransform_New(t *testing.T) {
 			},
 		},
 		{
+			name:      "delta",
+			transform: affine2d.Delta([]float64{0, 1}, []float64{2, 3}),
+			expected: [6]float64{
+				2, -2, 0,
+				2, 2, 1,
+			},
+		},
+		{
 			name:      "identity",
 			transform: affine2d.Identity(),
 			expected: [6]float64{
@@ -165,6 +173,18 @@ func TestTransform_Transform(t *testing.T) {
 			transform: affine2d.Translate(2, 3),
 			v:         []float64{1, 0},
 			expected:  []float64{3, 3},
+		},
+		{
+			name:      "origin_delta",
+			transform: affine2d.Delta([]float64{0, 1}, []float64{2, 3}),
+			v:         []float64{0, 0},
+			expected:  []float64{0, 1},
+		},
+		{
+			name:      "unit_x_delta",
+			transform: affine2d.Delta([]float64{0, 1}, []float64{2, 3}),
+			v:         []float64{1, 0},
+			expected:  []float64{2, 3},
 		},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
