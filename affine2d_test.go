@@ -219,6 +219,23 @@ func TestTransform_TransformDirection(t *testing.T) {
 	}
 }
 
+func TestTransform_TransformInPlace(t *testing.T) {
+	transform := affine2d.Scale(2, 3)
+	p := []float64{4, 5}
+	actual := transform.TransformInPlace(p)
+	assert.Equal(t, []float64{8, 15}, actual)
+	assert.Equal(t, &p[0], &actual[0])
+}
+
+func TestTransform_TransformSliceInPlace(t *testing.T) {
+	transform := affine2d.Scale(2, 3)
+	ps := [][]float64{{4, 5}, {6, 7}}
+	actual := transform.TransformSliceInPlace(ps)
+	assert.Equal(t, [][]float64{{8, 15}, {12, 21}}, actual)
+	assert.Equal(t, &ps[0], &actual[0])
+	assert.Equal(t, &ps[0][0], &actual[0][0])
+}
+
 func TestTransform_Multiply(t *testing.T) {
 	for _, tc := range []struct {
 		name             string

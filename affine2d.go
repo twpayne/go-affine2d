@@ -134,6 +134,12 @@ func (t *Transform) Transform(p []float64) []float64 {
 	return []float64{x, y}
 }
 
+// TransformInPlace transforms a single vector in place.
+func (t *Transform) TransformInPlace(p []float64) []float64 {
+	p[0], p[1] = t.TransformXY(p[0], p[1])
+	return p
+}
+
 // TransformDirection transforms the direction v.
 func (t *Transform) TransformDirection(v []float64) []float64 {
 	return []float64{
@@ -149,6 +155,14 @@ func (t *Transform) TransformSlice(ps [][]float64) [][]float64 {
 		result[i] = t.Transform(p)
 	}
 	return result
+}
+
+// TransformSliceInPlace transforms a slice of vectors in place.
+func (t *Transform) TransformSliceInPlace(ps [][]float64) [][]float64 {
+	for i := range ps {
+		t.TransformInPlace(ps[i])
+	}
+	return ps
 }
 
 // TransformXY transforms an X-Y coordinate.
