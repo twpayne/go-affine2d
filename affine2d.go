@@ -144,9 +144,9 @@ func (t *Transform) TransformDirection(v []float64) []float64 {
 
 // TransformSlice transforms a slice of vectors.
 func (t *Transform) TransformSlice(ps [][]float64) [][]float64 {
-	result := make([][]float64, 0, len(ps))
-	for _, p := range ps {
-		result = append(result, t.Transform(p))
+	result := make([][]float64, len(ps))
+	for i, p := range ps {
+		result[i] = t.Transform(p)
 	}
 	return result
 }
