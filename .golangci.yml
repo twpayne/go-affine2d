@@ -1,147 +1,174 @@
+version: "2"
 run:
-  go: '1.23'
-
+  go: "1.23"
 linters:
   enable:
-  - asasalint
-  - asciicheck
-  - bidichk
-  - bodyclose
-  - canonicalheader
-  - containedctx
-  - contextcheck
-  - copyloopvar
-  - decorder
-  - dogsled
-  - dupl
-  - dupword
-  - durationcheck
-  - err113
-  - errcheck
-  - errchkjson
-  - errname
-  - errorlint
-  - exhaustive
-  - fatcontext
-  - forbidigo
-  - forcetypeassert
-  - gci
-  - ginkgolinter
-  - gocheckcompilerdirectives
-  - gochecknoinits
-  - goconst
-  - gocritic
-  - gocyclo
-  - godot
-  - gofmt
-  - gofumpt
-  - goheader
-  - goimports
-  - gomoddirectives
-  - gomodguard
-  - goprintffuncname
-  - gosec
-  - gosimple
-  - gosmopolitan
-  - govet
-  - grouper
-  - iface
-  - importas
-  - inamedparam
-  - ineffassign
-  - interfacebloat
-  - intrange
-  - ireturn
-  - loggercheck
-  - makezero
-  - mirror
-  - misspell
-  - musttag
-  - nakedret
-  - nestif
-  - nilerr
-  - nilnil
-  - noctx
-  - nolintlint
-  - nonamedreturns
-  - nosprintfhostport
-  - perfsprint
-  - prealloc
-  - predeclared
-  - promlinter
-  - protogetter
-  - reassign
-  - recvcheck
-  - revive
-  - rowserrcheck
-  - sloglint
-  - spancheck
-  - sqlclosecheck
-  - staticcheck
-  - stylecheck
-  - tagalign
-  - tagliatelle
-  - tenv
-  - testifylint
-  - testpackage
-  - thelper
-  - tparallel
-  - typecheck
-  - unconvert
-  - unparam
-  - unused
-  - usestdlibvars
-  - wastedassign
-  - whitespace
-  - zerologlint
-  disable:
-  - cyclop
-  - depguard
-  - exhaustruct
-  - funlen
-  - gochecknoglobals
-  - gocognit
-  - godox
-  - lll
-  - maintidx
-  - nlreturn
-  - paralleltest
-  - testableexamples
-  - varnamelen
-  - wrapcheck
-  - wsl
-
-linters-settings:
-  gci:
-    sections:
-    - standard
-    - default
-    - prefix(github.com/twpayne/go-affine2d)
-  gofumpt:
-    extra-rules: true
-  goimports:
-    local-prefixes: github.com/twpayne/go-affine2d
-  govet:
-    disable:
-    - fieldalignment
-    - shadow
-    enable-all: true
-  misspell:
-    locale: US
-  stylecheck:
-    checks:
-    - all
-
-issues:
-  exclude-rules:
-  - linters:
+    - arangolint
+    - asasalint
+    - asciicheck
+    - bidichk
+    - bodyclose
+    - canonicalheader
+    - containedctx
+    - contextcheck
+    - copyloopvar
+    - decorder
+    - dogsled
     - dupl
-    - scopelint
-    path: "_test\\.go"
-  - linters:
-    - forbidigo
-    - gosec
-    path: "(cmd|internal)/"
-  - linters:
+    - dupword
+    - durationcheck
+    - embeddedstructfieldcheck
     - err113
-    text: do not define dynamic errors, use wrapped static errors instead
+    - errchkjson
+    - errname
+    - errorlint
+    - exhaustive
+    - exhaustruct
+    - exptostd
+    - fatcontext
+    - forbidigo
+    - forcetypeassert
+    - funcorder
+    - ginkgolinter
+    - gocheckcompilerdirectives
+    - gochecknoinits
+    - gochecksumtype
+    - goconst
+    - gocritic
+    - gocyclo
+    - godoclint
+    - godot
+    - godox
+    - goheader
+    - gomoddirectives
+    - gomodguard
+    - goprintffuncname
+    - gosec
+    - gosmopolitan
+    - grouper
+    - iface
+    - importas
+    - inamedparam
+    - interfacebloat
+    - intrange
+    - iotamixing
+    - ireturn
+    - loggercheck
+    - makezero
+    - mirror
+    - misspell
+    - mnd
+    - modernize
+    - musttag
+    - nakedret
+    - nestif
+    - nilerr
+    - nilnesserr
+    - nilnil
+    - noctx
+    - nolintlint
+    - nonamedreturns
+    - nosprintfhostport
+    - perfsprint
+    - prealloc
+    - predeclared
+    - promlinter
+    - protogetter
+    - reassign
+    - recvcheck
+    - revive
+    - rowserrcheck
+    - sloglint
+    - spancheck
+    - sqlclosecheck
+    - staticcheck
+    - tagalign
+    - tagliatelle
+    - testableexamples
+    - testifylint
+    - testpackage
+    - thelper
+    - tparallel
+    - unconvert
+    - unparam
+    - unqueryvet
+    - usestdlibvars
+    - usetesting
+    - wastedassign
+    - whitespace
+    - zerologlint
+  disable:
+    - cyclop
+    - depguard
+    - exhaustruct
+    - funlen
+    - gochecknoglobals
+    - gocognit
+    - godox
+    - lll
+    - maintidx
+    - nlreturn
+    - noinlineerr
+    - paralleltest
+    - testableexamples
+    - varnamelen
+    - wrapcheck
+    - wsl
+    - wsl_v5
+  settings:
+    govet:
+      disable:
+        - fieldalignment
+        - shadow
+      enable-all: true
+    misspell:
+      locale: US
+    staticcheck:
+      checks:
+        - all
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    rules:
+      - linters:
+          - dupl
+          - scopelint
+        path: _test\.go
+      - linters:
+          - forbidigo
+          - gosec
+        path: (cmd|internal)/
+      - linters:
+          - err113
+        text: do not define dynamic errors, use wrapped static errors instead
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gci
+    - gofmt
+    - gofumpt
+    - goimports
+  settings:
+    gci:
+      sections:
+        - standard
+        - default
+        - prefix(github.com/twpayne/go-affine2d)
+    gofumpt:
+      extra-rules: true
+    goimports:
+      local-prefixes:
+        - github.com/twpayne/go-affine2d
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
