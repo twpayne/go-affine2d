@@ -91,6 +91,7 @@ func (t *Transform) Float64Slice() []float64 {
 	return t.m[:]
 }
 
+// Inverse returns the inverse of t.
 func (t *Transform) Inverse() *Transform {
 	d := t.m[0]*t.m[4] - t.m[1]*t.m[3]
 	return &Transform{
