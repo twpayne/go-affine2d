@@ -1,6 +1,6 @@
 module github.com/twpayne/go-affine2d
 
-go 1.23.0
+go 1.25.0
 
 require github.com/alecthomas/assert/v2 v2.9.0
 
