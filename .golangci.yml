@@ -1,6 +1,6 @@
 version: "2"
 run:
-  go: "1.25"
+  go: "1.27"
 linters:
   enable:
     - arangolint
@@ -33,7 +33,6 @@ linters:
     - gocheckcompilerdirectives
     - gochecknoinits
     - gochecksumtype
-    - goconst
     - gocritic
     - gocyclo
     - godoclint
@@ -41,7 +40,7 @@ linters:
     - godox
     - goheader
     - gomoddirectives
-    - gomodguard
+    - gomodguard_v2
     - goprintffuncname
     - gosec
     - gosmopolitan
@@ -104,6 +103,7 @@ linters:
     - funlen
     - gochecknoglobals
     - gocognit
+    - goconst
     - godox
     - lll
     - maintidx
@@ -162,7 +162,10 @@ formatters:
         - default
         - prefix(github.com/twpayne/go-affine2d)
     gofumpt:
-      extra-rules: true
+      extra:
+        group-params: true
+        clothe-returns: true
+        balance-calls: true
     goimports:
       local-prefixes:
         - github.com/twpayne/go-affine2d
