@@ -171,6 +171,24 @@ func (t *Transform) TransformXY(x, y float64) (float64, float64) {
 	return t.m[0]*x + t.m[1]*y + t.m[2], t.m[3]*x + t.m[4]*y + t.m[5]
 }
 
+// TransformXYs transforms separate slices of X and Y coordinates.
+func (t *Transform) TransformXYs(xs, ys []float64) ([]float64, []float64) {
+	n := min(len(xs), len(ys))
+	xResults, yResults := make([]float64, n), make([]float64, n)
+	for i := range n {
+		xResults[i], yResults[i] = t.TransformXY(xs[i], ys[i])
+	}
+	return xResults, yResults
+}
+
+// TransformXYsInPlace transforms separate slices of X and Y coordinates in place.
+func (t *Transform) TransformXYsInPlace(xs, ys []float64) ([]float64, []float64) {
+	for i := range min(len(xs), len(ys)) {
+		xs[i], ys[i] = t.TransformXY(xs[i], ys[i])
+	}
+	return xs, ys
+}
+
 // Translate returns a new transform which is t then a translate.
 func (t *Transform) Translate(tx, ty float64) *Transform {
 	// FIXME optimize matrix multiplication as we know the structure of the translate matrix

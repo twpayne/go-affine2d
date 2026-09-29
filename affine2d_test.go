@@ -367,6 +367,24 @@ func TestTransform_TransformSlice(t *testing.T) {
 	}, actual)
 }
 
+func TestTransform_TransformXYs(t *testing.T) {
+	xs := []float64{0, 1, 1, 0}
+	ys := []float64{0, 0, 1, 1}
+	actualXs, actualYs := affine2d.Scale(2, 3).Translate(3, 4).TransformXYs(xs, ys)
+	assert.Equal(t, []float64{3, 5, 5, 3}, actualXs)
+	assert.Equal(t, []float64{4, 4, 7, 7}, actualYs)
+}
+
+func TestTransform_TransformXYsInPlace(t *testing.T) {
+	xs := []float64{0, 1, 1, 0}
+	ys := []float64{0, 0, 1, 1}
+	actualXs, actualYs := affine2d.Scale(2, 3).Translate(3, 4).TransformXYsInPlace(xs, ys)
+	assert.Equal(t, &xs[0], &actualXs[0])
+	assert.Equal(t, &ys[0], &actualYs[0])
+	assert.Equal(t, []float64{3, 5, 5, 3}, xs)
+	assert.Equal(t, []float64{4, 4, 7, 7}, ys)
+}
+
 func assertInDelta(t *testing.T, expected, actual []float64, maxDelta float64) {
 	t.Helper()
 	assert.Equal(t, len(expected), len(actual))
