@@ -93,11 +93,11 @@ func (t *Transform) Float64Slice() []float64 {
 
 // Inverse returns the inverse of t.
 func (t *Transform) Inverse() *Transform {
-	d := t.m[0]*t.m[4] - t.m[1]*t.m[3]
+	d := math.FMA(t.m[0], t.m[4], -t.m[1]*t.m[3])
 	return &Transform{
 		m: [6]float64{
-			t.m[4] / d, -t.m[1] / d, (t.m[1]*t.m[5] - t.m[2]*t.m[4]) / d,
-			-t.m[3] / d, t.m[0] / d, (t.m[2]*t.m[3] - t.m[0]*t.m[5]) / d,
+			t.m[4] / d, -t.m[1] / d, math.FMA(t.m[1], t.m[5], -t.m[2]*t.m[4]) / d,
+			-t.m[3] / d, t.m[0] / d, math.FMA(t.m[2], t.m[3], -t.m[0]*t.m[5]) / d,
 		},
 	}
 }
@@ -106,22 +106,40 @@ func (t *Transform) Inverse() *Transform {
 func (t *Transform) Multiply(u *Transform) *Transform {
 	return &Transform{
 		m: [6]float64{
-			t.m[0]*u.m[0] + t.m[1]*u.m[3], t.m[0]*u.m[1] + t.m[1]*u.m[4], t.m[0]*u.m[2] + t.m[1]*u.m[5] + t.m[2],
-			t.m[3]*u.m[0] + t.m[4]*u.m[3], t.m[3]*u.m[1] + t.m[4]*u.m[4], t.m[3]*u.m[2] + t.m[4]*u.m[5] + t.m[5],
+			math.FMA(t.m[0], u.m[0], t.m[1]*u.m[3]),
+			math.FMA(t.m[0], u.m[1], t.m[1]*u.m[4]),
+			math.FMA(t.m[0], u.m[2], math.FMA(t.m[1], u.m[5], t.m[2])),
+			math.FMA(t.m[3], u.m[0], t.m[4]*u.m[3]),
+			math.FMA(t.m[3], u.m[1], t.m[4]*u.m[4]),
+			math.FMA(t.m[3], u.m[2], math.FMA(t.m[4], u.m[5], t.m[5])),
 		},
 	}
 }
 
 // Rotate returns a new transform which is t then a rotation.
 func (t *Transform) Rotate(theta float64) *Transform {
-	// FIXME optimize matrix multiplication as we know the structure of the rotate matrix
-	return t.Then(Rotate(theta))
+	cosTheta := math.Cos(theta)
+	sinTheta := math.Sin(theta)
+	return &Transform{
+		m: [6]float64{
+			math.FMA(cosTheta, t.m[0], -sinTheta*t.m[3]),
+			math.FMA(cosTheta, t.m[1], -sinTheta*t.m[4]),
+			math.FMA(cosTheta, t.m[2], -sinTheta*t.m[5]),
+			math.FMA(sinTheta, t.m[0], cosTheta*t.m[3]),
+			math.FMA(sinTheta, t.m[1], cosTheta*t.m[4]),
+			math.FMA(sinTheta, t.m[2], cosTheta*t.m[5]),
+		},
+	}
 }
 
 // Scale returns a new transform which is t then a scale.
 func (t *Transform) Scale(sx, sy float64) *Transform {
-	// FIXME optimize matrix multiplication as we know the structure of the scale matrix
-	return t.Then(Scale(sx, sy))
+	return &Transform{
+		m: [6]float64{
+			sx * t.m[0], sx * t.m[1], sx * t.m[2],
+			sy * t.m[3], sy * t.m[4], sy * t.m[5],
+		},
+	}
 }
 
 // Then returns a transform that is t then u.
@@ -144,8 +162,8 @@ func (t *Transform) TransformInPlace(p []float64) []float64 {
 // TransformDirection transforms the direction v.
 func (t *Transform) TransformDirection(v []float64) []float64 {
 	return []float64{
-		t.m[0]*v[0] + t.m[1]*v[1],
-		t.m[3]*v[0] + t.m[4]*v[1],
+		math.FMA(t.m[0], v[0], t.m[1]*v[1]),
+		math.FMA(t.m[3], v[0], t.m[4]*v[1]),
 	}
 }
 
@@ -168,11 +186,16 @@ func (t *Transform) TransformSliceInPlace(ps [][]float64) [][]float64 {
 
 // TransformXY transforms an X-Y coordinate.
 func (t *Transform) TransformXY(x, y float64) (float64, float64) {
-	return t.m[0]*x + t.m[1]*y + t.m[2], t.m[3]*x + t.m[4]*y + t.m[5]
+	return math.FMA(t.m[0], x, math.FMA(t.m[1], y, t.m[2])),
+		math.FMA(t.m[3], x, math.FMA(t.m[4], y, t.m[5]))
 }
 
 // Translate returns a new transform which is t then a translate.
 func (t *Transform) Translate(tx, ty float64) *Transform {
-	// FIXME optimize matrix multiplication as we know the structure of the translate matrix
-	return t.Then(Translate(tx, ty))
+	return &Transform{
+		m: [6]float64{
+			t.m[0], t.m[1], t.m[2] + tx,
+			t.m[3], t.m[4], t.m[5] + ty,
+		},
+	}
 }
