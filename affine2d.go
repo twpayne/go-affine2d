@@ -10,7 +10,7 @@ type Transform struct {
 
 // Delta returns the transform that transforms the origin to origin and the unit
 // X vector to unitX.
-func Delta(origin, unitX []float64) Transform {
+func Delta(origin, unitX [2]float64) Transform {
 	dx := unitX[0] - origin[0]
 	dy := unitX[1] - origin[1]
 	return Transform{
