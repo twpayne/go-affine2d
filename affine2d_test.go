@@ -443,7 +443,7 @@ func assertInDelta(t *testing.T, expected, actual []float64, maxDelta float64) {
 	assert.Equal(t, len(expected), len(actual))
 	for i := range expected {
 		if actualDelta := math.Abs(expected[i] - actual[i]); actualDelta > maxDelta {
-			t.Fatalf("Expected values to be within %e but |%e-%e| is %e at position %d", maxDelta, expected[i], actual[i], actualDelta, i)
+			t.Fatalf("Expected values to be within %g but |%g-%g| is %g at position %d", maxDelta, expected[i], actual[i], actualDelta, i)
 		}
 	}
 }
