@@ -12,8 +12,8 @@ import (
 func TestTransform_Inverse(t *testing.T) {
 	for _, tc := range []struct {
 		name     string
-		t        *affine2d.Transform
-		expected *affine2d.Transform
+		t        affine2d.Transform
+		expected affine2d.Transform
 	}{
 		{
 			name:     "identity",
@@ -49,7 +49,7 @@ func TestTransform_Float64Array(t *testing.T) {
 func TestTransform_New(t *testing.T) {
 	for _, tc := range []struct {
 		name      string
-		transform *affine2d.Transform
+		transform affine2d.Transform
 		expected  [6]float64
 	}{
 		{
@@ -110,7 +110,7 @@ func TestTransform_New(t *testing.T) {
 func TestTransform_Transform(t *testing.T) {
 	for _, tc := range []struct {
 		name      string
-		transform *affine2d.Transform
+		transform affine2d.Transform
 		p         []float64
 		expected  []float64
 	}{
@@ -196,7 +196,7 @@ func TestTransform_Transform(t *testing.T) {
 func TestTransform_TransformDirection(t *testing.T) {
 	for _, tc := range []struct {
 		name      string
-		transform *affine2d.Transform
+		transform affine2d.Transform
 		v         []float64
 		expected  []float64
 	}{
@@ -239,8 +239,8 @@ func TestTransform_TransformSliceInPlace(t *testing.T) {
 func TestTransform_Multiply(t *testing.T) {
 	for _, tc := range []struct {
 		name             string
-		t                *affine2d.Transform
-		u                *affine2d.Transform
+		t                affine2d.Transform
+		u                affine2d.Transform
 		expectedFloat64s []float64
 	}{
 		{
@@ -301,7 +301,7 @@ func TestTransform_Multiply(t *testing.T) {
 func TestTransform_Series(t *testing.T) {
 	for _, tc := range []struct {
 		name             string
-		t                *affine2d.Transform
+		t                affine2d.Transform
 		expectedFloat64s []float64
 	}{
 		{
@@ -354,7 +354,7 @@ func TestTransform_Series(t *testing.T) {
 func TestTransform_Then(t *testing.T) {
 	for _, tc := range []struct {
 		name             string
-		t                *affine2d.Transform
+		t                affine2d.Transform
 		expectedFloat64s []float64
 	}{
 		{
