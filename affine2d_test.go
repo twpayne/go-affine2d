@@ -9,7 +9,7 @@ import (
 	"github.com/twpayne/go-affine2d"
 )
 
-func TestTransform_Inverse(t *testing.T) {
+func TestTransform_Invert(t *testing.T) {
 	for _, tc := range []struct {
 		name     string
 		t        affine2d.Transform
@@ -37,7 +37,7 @@ func TestTransform_Inverse(t *testing.T) {
 		},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
-			assertInDelta(t, tc.expected.Float64Slice(), tc.t.Inverse().Float64Slice(), 0)
+			assertInDelta(t, tc.expected.Float64Slice(), tc.t.Invert().Float64Slice(), 0)
 		})
 	}
 }
